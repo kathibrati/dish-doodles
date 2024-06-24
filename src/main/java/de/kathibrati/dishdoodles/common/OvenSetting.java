@@ -1,4 +1,4 @@
-package de.kathibrati.dishdoodles.model;
+package de.kathibrati.dishdoodles.common;
 
 public enum OvenSetting {
   CONVECTION,

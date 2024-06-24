@@ -1,21 +1,41 @@
 package de.kathibrati.dishdoodles.controller;
 
 import de.kathibrati.dishdoodles.model.Ingredient;
-import de.kathibrati.dishdoodles.model.OvenSetting;
+import de.kathibrati.dishdoodles.common.OvenSetting;
 import de.kathibrati.dishdoodles.model.Recipe;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import de.kathibrati.dishdoodles.repository.RecipeRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import static de.kathibrati.dishdoodles.common.Constants.API;
 
 @RestController
-@RequestMapping("/{country}/{language}/recipes")
+@RequestMapping("/" + API + "/recipes")
 public class RecipeController {
 
-  @PostMapping("/submitRecipe")
+  private final RecipeRepository recipeRepository;
+
+  public RecipeController(RecipeRepository recipeRepository) {
+    this.recipeRepository = recipeRepository;
+  }
+
+  @GetMapping ResponseEntity<List<Recipe>> findAll() {
+    Optional<List<Recipe>> allRecipes = Optional.ofNullable(recipeRepository.findAll());
+    return allRecipes.map((ResponseEntity::ok))
+      .orElse(ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/{id}") ResponseEntity<Recipe> findById(@PathVariable(name = "id") Long id) {
+    Optional<Recipe> recipe = Optional.ofNullable(recipeRepository.findById(id));
+    return recipe.map(ResponseEntity::ok)
+      .orElse(ResponseEntity.notFound().build());
+  }
+
+  @PostMapping("/{id}/submitRecipe")
   public String submitRecipe(
     @RequestParam("recipeName") String recipeName,
     @RequestParam("ingredientList") List<Ingredient> ingredientList,
@@ -30,8 +50,8 @@ public class RecipeController {
     @RequestParam("totalKcals") double totalKcals,
     @RequestParam("servings") double servings,
     @RequestParam("creationDate") Date creationDate,
-    @RequestParam("modificationDate") Date modificationDate
-  ) {
+    @RequestParam("modificationDate") Date modificationDate,
+    @PathVariable Long id) {
     Recipe recipe = new Recipe();
     recipe.setRecipeName(recipeName);
     recipe.setIngredientList(ingredientList);
@@ -47,8 +67,6 @@ public class RecipeController {
     recipe.setServings(servings);
     recipe.setCreationDate(creationDate);
     recipe.setModificationDate(modificationDate);
-
-    // Save recipe to the database or process as needed
 
     return "recipeSuccess";
   }

@@ -1,5 +1,6 @@
 package de.kathibrati.dishdoodles.model;
 
+import de.kathibrati.dishdoodles.common.OvenSetting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Recipe {
 
+  private Long id;
   private String recipeName;
   private List<Ingredient> ingredientList;
   private List<OvenSetting> ovenSettings;

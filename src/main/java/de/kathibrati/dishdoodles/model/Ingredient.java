@@ -1,5 +1,6 @@
 package de.kathibrati.dishdoodles.model;
 
+import de.kathibrati.dishdoodles.common.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Ingredient {
 
+  private Long id;
   private String name;
   private String description;
   private String imageUrl;
