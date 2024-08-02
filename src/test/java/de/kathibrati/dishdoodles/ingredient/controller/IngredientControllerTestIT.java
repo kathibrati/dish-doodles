@@ -18,8 +18,17 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
 
         mockMvc.perform(get("/api/ingredients"))
                 .andExpectAll(
-                        status().is2xxSuccessful(),
+                        status().isOk(),
                         content().json(objectMapper.writeValueAsString(List.of(banana)))
+                );
+    }
+
+    @Test void getSingleIngredient() throws Exception {
+        Ingredient mehl = persistSampleIngredient("Mehl");
+        mockMvc.perform((get("/api/ingredients/" + mehl.getId())))
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(objectMapper.writeValueAsString(mehl))
                 );
     }
 }

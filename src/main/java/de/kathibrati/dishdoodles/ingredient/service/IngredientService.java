@@ -22,4 +22,7 @@ public class IngredientService {
                 .toList();
     }
 
+    public IngredientDto findById(Long id) {
+        return IngredientDto.from(ingredientRepository.findById(id).orElseThrow());
+    }
 }
