@@ -1,37 +1,29 @@
 package de.kathibrati.dishdoodles.ingredient.controller;
 
-import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
-import de.kathibrati.dishdoodles.ingredient.repository.IngredientRepository;
+import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
+import de.kathibrati.dishdoodles.ingredient.service.IngredientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 import static de.kathibrati.dishdoodles.common.Constants.API;
 
 @RestController
-@RequestMapping("/" + API + "/ingredients")
+@RequestMapping(path = "/" + API + "/ingredients")
 public class IngredientController {
 
-  private final IngredientRepository ingredientRepository;
+    private final IngredientService ingredientService;
 
-  public IngredientController(IngredientRepository ingredientRepository) {
-    this.ingredientRepository = ingredientRepository;
-  }
+    public IngredientController(IngredientService ingredientService) {
+        this.ingredientService = ingredientService;
+    }
 
-  @GetMapping ResponseEntity<List<Ingredient>> findAll() {
-    Optional<List<Ingredient>> allIngredients = Optional.ofNullable(ingredientRepository.findAll());
-    return allIngredients.map((ResponseEntity::ok))
-      .orElse(ResponseEntity.notFound().build());
-  }
-
-  @GetMapping("/{id}") ResponseEntity<Ingredient> findById(@PathVariable(name = "id") Long id) {
-    Optional<Ingredient> ingredient = Optional.ofNullable(ingredientRepository.findById(id));
-    return ingredient.map(ResponseEntity::ok)
-      .orElse(ResponseEntity.notFound().build());
-  }
+    @GetMapping
+    public ResponseEntity<List<IngredientDto>> getIngredients() {
+        List<IngredientDto> ingredients = ingredientService.findAll();
+        return ResponseEntity.ok(ingredients);
+    }
 }

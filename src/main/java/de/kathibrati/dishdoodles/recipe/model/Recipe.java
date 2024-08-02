@@ -1,4 +1,4 @@
-package de.kathibrati.dishdoodles.controller.model;
+package de.kathibrati.dishdoodles.recipe.model;
 
 import de.kathibrati.dishdoodles.common.OvenSetting;
 import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
