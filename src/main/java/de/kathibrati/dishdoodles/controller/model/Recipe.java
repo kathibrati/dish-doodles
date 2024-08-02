@@ -1,6 +1,7 @@
-package de.kathibrati.dishdoodles.model;
+package de.kathibrati.dishdoodles.controller.model;
 
 import de.kathibrati.dishdoodles.common.OvenSetting;
+import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

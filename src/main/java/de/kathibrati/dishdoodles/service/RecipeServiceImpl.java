@@ -1,6 +1,6 @@
 package de.kathibrati.dishdoodles.service;
 
-import de.kathibrati.dishdoodles.model.Recipe;
+import de.kathibrati.dishdoodles.controller.model.Recipe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

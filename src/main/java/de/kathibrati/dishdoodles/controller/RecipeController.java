@@ -1,9 +1,8 @@
 package de.kathibrati.dishdoodles.controller;
 
-import de.kathibrati.dishdoodles.model.Ingredient;
+import de.kathibrati.dishdoodles.controller.model.Recipe;
+import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import de.kathibrati.dishdoodles.common.OvenSetting;
-import de.kathibrati.dishdoodles.model.Recipe;
-import de.kathibrati.dishdoodles.repository.RecipeRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

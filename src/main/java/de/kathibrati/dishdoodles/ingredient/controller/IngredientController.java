@@ -1,8 +1,7 @@
-package de.kathibrati.dishdoodles.controller;
+package de.kathibrati.dishdoodles.ingredient.controller;
 
-import de.kathibrati.dishdoodles.model.Ingredient;
-import de.kathibrati.dishdoodles.repository.IngredientRepository;
-
+import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
+import de.kathibrati.dishdoodles.ingredient.repository.IngredientRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
