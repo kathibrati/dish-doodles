@@ -1,16 +1,12 @@
 package de.kathibrati.dishdoodles.ingredient.controller;
 
-import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import de.kathibrati.dishdoodles.ingredient.service.IngredientService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 import static de.kathibrati.dishdoodles.common.Constants.API;
 
@@ -46,8 +42,9 @@ public class IngredientController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<IngredientDto> deleteIngredient(@PathVariable Long id) {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIngredientById(@PathVariable Long id) {
+        ingredientService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

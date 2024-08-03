@@ -6,7 +6,6 @@ import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import de.kathibrati.dishdoodles.ingredient.repository.IngredientRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +34,9 @@ public class IngredientService {
     public IngredientDto save(IngredientCreateOrUpdateResource resource) {
         Ingredient entity = resource.convertToIngredient();
         return IngredientDto.from(ingredientRepository.save(entity));
+    }
+
+    public void deleteById(Long id) {
+        ingredientRepository.deleteById(id);
     }
 }
