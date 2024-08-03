@@ -5,9 +5,11 @@ import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class IngredientControllerTestIT extends AbstractControllerTestIT {
 
     @Test
-    void getIngredients() throws Exception {
+    void getIngredients__success() throws Exception {
         Ingredient banana = persistSampleIngredient("Banana");
 
         mockMvc.perform(get("/api/ingredients"))
@@ -27,7 +29,7 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
     }
 
     @Test
-    void getSingleIngredient() throws Exception {
+    void getSingleIngredient__success() throws Exception {
         Ingredient mehl = persistSampleIngredient("Mehl");
         mockMvc.perform((get("/api/ingredients/" + mehl.getId())))
                 .andExpectAll(
@@ -37,7 +39,15 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
     }
 
     @Test
-    void createNewIngredient() throws Exception {
+    void getSingleIngredient__not_found() throws Exception {
+        mockMvc.perform(get("/api/ingredients/" + 123456L))
+                .andExpect(
+                        status().isNotFound()
+                );
+    }
+
+    @Test
+    void createIngredient__success() throws Exception {
         IngredientCreateOrUpdateResource createOrUpdateResource = new IngredientCreateOrUpdateResource("Tomate");
 
         mockMvc.perform(
