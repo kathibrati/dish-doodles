@@ -2,13 +2,16 @@ package de.kathibrati.dishdoodles.ingredient.controller;
 
 import de.kathibrati.dishdoodles.controller.AbstractControllerTestIT;
 import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
+import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class IngredientControllerTestIT extends AbstractControllerTestIT {
 
@@ -23,12 +26,40 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
                 );
     }
 
-    @Test void getSingleIngredient() throws Exception {
+    @Test
+    void getSingleIngredient() throws Exception {
         Ingredient mehl = persistSampleIngredient("Mehl");
         mockMvc.perform((get("/api/ingredients/" + mehl.getId())))
                 .andExpectAll(
                         status().isOk(),
                         content().json(objectMapper.writeValueAsString(mehl))
                 );
+    }
+
+    @Test
+    void createNewIngredient() throws Exception {
+        IngredientCreateOrUpdateResource createOrUpdateResource = new IngredientCreateOrUpdateResource("Tomate");
+
+        mockMvc.perform(
+                        post("/api/ingredients")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(createOrUpdateResource))
+                )
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.id").exists(),
+                        jsonPath("$.name", is(createOrUpdateResource.name()))
+                );
+
+        // oder so
+//        var result = mockMvc.perform(post("/api/ingredients")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(createOrUpdateResource))).andReturn();
+//
+//        var dto = objectMapper.readValue(result.getResponse().getContentAsString(), IngredientDto.class);
+//
+//        assertThat(dto.id()).isNotNull();
+//        assertThat(dto.name()).isEqualTo(createOrUpdateResource.name());
+
     }
 }

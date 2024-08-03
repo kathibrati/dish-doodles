@@ -1,5 +1,6 @@
 package de.kathibrati.dishdoodles.ingredient.service;
 
+import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import de.kathibrati.dishdoodles.ingredient.repository.IngredientRepository;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,9 @@ public class IngredientService {
 
     public IngredientDto findById(Long id) {
         return IngredientDto.from(ingredientRepository.findById(id).orElseThrow());
+    }
+
+    public IngredientDto save(IngredientCreateOrUpdateResource resource) {
+        return IngredientDto.from(ingredientRepository.save((resource.convertToIngredient())));
     }
 }

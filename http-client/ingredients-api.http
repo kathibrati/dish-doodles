@@ -1,6 +1,13 @@
 ### GET request to example server
 GET http://localhost:8080/api/ingredients
 
+### POST
+POST http://localhost:8080/api/ingredients
+Content-Type: application/json
+
+{
+"name": "Banane"
+}
 
 
 ###

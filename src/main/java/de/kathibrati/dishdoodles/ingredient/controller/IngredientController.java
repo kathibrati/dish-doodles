@@ -1,12 +1,11 @@
 package de.kathibrati.dishdoodles.ingredient.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import de.kathibrati.dishdoodles.ingredient.service.IngredientService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,8 +32,20 @@ public class IngredientController {
         IngredientDto dto = ingredientService.findById(id);
         if (dto != null) {
             return ResponseEntity.ok(dto);
-        } else
+        } else {
             return ResponseEntity.notFound().build();
+        }
 
+    }
+
+    @PostMapping
+    public ResponseEntity<IngredientDto> createIngredient(@RequestBody IngredientCreateOrUpdateResource ingredientResource) {
+        IngredientDto dto = ingredientService.save(ingredientResource);
+        if (dto != null) {
+            return ResponseEntity.ok(dto);
+//            return ResponseEntity.created(dto);
+        } else {
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
 }
