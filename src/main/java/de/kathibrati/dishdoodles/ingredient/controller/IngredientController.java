@@ -54,4 +54,17 @@ public class IngredientController {
         ingredientService.updateIngredient(resource, id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<IngredientDto>> searchIngredientBySearchTerm(@RequestParam("name") String searchName) {
+        List<IngredientDto> dtos = ingredientService.searchByName(searchName);
+
+        if (dtos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(dtos);
+
+    }
+
 }

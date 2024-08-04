@@ -1,10 +1,14 @@
 package de.kathibrati.dishdoodles.ingredient.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.kathibrati.dishdoodles.controller.AbstractControllerTestIT;
 import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
+import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
@@ -122,6 +126,27 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
         ).andExpect(status().isNotFound());
 
         assertThat(name).isEqualTo(tomate.getName());
+
+    }
+
+    @Test
+    void searchIngredientBySearchTerm__succes() throws Exception {
+        Ingredient tomate =persistSampleIngredient("Tomate");
+        Ingredient mate =persistSampleIngredient("Mate");
+        Ingredient zucker =persistSampleIngredient("Zucker");
+
+        String searchName = "ate";
+
+       MvcResult result = mockMvc.perform(get("/api/ingredients/search?name=" + searchName))
+                .andExpect(status().isOk()).andReturn();
+
+        List<IngredientDto> dtos = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
+
+        List<String> dtoNames = dtos.stream().map(IngredientDto::name).toList();
+
+        assertThat(dtoNames).containsExactlyInAnyOrder(tomate.getName(), mate.getName());
+
+
 
     }
 }
