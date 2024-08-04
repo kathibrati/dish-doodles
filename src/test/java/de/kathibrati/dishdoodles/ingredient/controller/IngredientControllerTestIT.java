@@ -5,7 +5,6 @@ import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
@@ -83,6 +82,46 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
     @Test
     void deleteIngredientByIdById__entity_doesnt_exist() throws Exception {
         mockMvc.perform(delete("/api/ingredients/1")).andExpect(status().isOk());
+
+    }
+
+    @Test
+    void updateIngredient__should_update_name() throws Exception {
+        Ingredient tomate = persistSampleIngredient("Tomate");
+        IngredientCreateOrUpdateResource updateResource = new IngredientCreateOrUpdateResource("Zucker");
+
+        var entity = ingredientRepository.findById(tomate.getId()).orElseThrow();
+
+        assertThat(entity.getName()).isEqualTo("Tomate");
+
+        mockMvc.perform(
+                        put("/api/ingredients/"+tomate.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateResource))
+                )
+                .andExpect(status().isNoContent()
+                );
+
+        entity = ingredientRepository.findById(tomate.getId()).orElseThrow();
+
+        assertThat(entity.getName()).isEqualTo("Zucker");
+
+
+    }
+
+    @Test
+    void updateIngredient__should_not_update_name() throws Exception {
+        Ingredient tomate = persistSampleIngredient("Tomate");
+
+        String name = ingredientRepository.findById(tomate.getId()).map(Ingredient::getName).orElseThrow();
+        assertThat(name).isEqualTo(tomate.getName());
+
+        mockMvc.perform(put("/api/ingredients/4")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tomate))
+        ).andExpect(status().isNotFound());
+
+        assertThat(name).isEqualTo(tomate.getName());
 
     }
 }

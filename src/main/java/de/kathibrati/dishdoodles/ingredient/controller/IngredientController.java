@@ -47,4 +47,11 @@ public class IngredientController {
         ingredientService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateIngredient(@PathVariable Long id,
+                                                 @RequestBody IngredientCreateOrUpdateResource resource) {
+        ingredientService.updateIngredient(resource, id);
+        return ResponseEntity.noContent().build();
+    }
 }
