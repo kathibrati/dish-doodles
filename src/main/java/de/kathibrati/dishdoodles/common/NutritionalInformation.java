@@ -1,6 +1,5 @@
 package de.kathibrati.dishdoodles.common;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

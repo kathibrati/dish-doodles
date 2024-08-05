@@ -3,6 +3,7 @@ package de.kathibrati.dishdoodles.ingredient.controller;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import de.kathibrati.dishdoodles.ingredient.service.IngredientService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class IngredientController {
 
     @PostMapping
     public ResponseEntity<IngredientDto> createIngredient(
-            @RequestBody IngredientCreateOrUpdateResource ingredientResource
+           @Valid @RequestBody IngredientCreateOrUpdateResource ingredientResource
     ) {
         IngredientDto dto = ingredientService.save(ingredientResource);
 

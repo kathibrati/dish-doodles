@@ -1,7 +1,6 @@
 package de.kathibrati.dishdoodles.ingredient.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.kathibrati.dishdoodles.controller.AbstractControllerTestIT;
 import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
 import de.kathibrati.dishdoodles.ingredient.model.IngredientCreateOrUpdateResource;
@@ -50,7 +49,7 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
 
     @Test
     void createIngredient__success() throws Exception {
-        IngredientCreateOrUpdateResource createOrUpdateResource = new IngredientCreateOrUpdateResource("Tomate");
+        IngredientCreateOrUpdateResource createOrUpdateResource = new IngredientCreateOrUpdateResource("Tomate", 100);
 
         mockMvc.perform(
                         post("/api/ingredients")
@@ -92,14 +91,14 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
     @Test
     void updateIngredient__should_update_name() throws Exception {
         Ingredient tomate = persistSampleIngredient("Tomate");
-        IngredientCreateOrUpdateResource updateResource = new IngredientCreateOrUpdateResource("Zucker");
+        IngredientCreateOrUpdateResource updateResource = new IngredientCreateOrUpdateResource("Zucker", 50);
 
         var entity = ingredientRepository.findById(tomate.getId()).orElseThrow();
 
         assertThat(entity.getName()).isEqualTo("Tomate");
 
         mockMvc.perform(
-                        put("/api/ingredients/"+tomate.getId())
+                        put("/api/ingredients/" + tomate.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(updateResource))
                 )
@@ -131,22 +130,36 @@ class IngredientControllerTestIT extends AbstractControllerTestIT {
 
     @Test
     void searchIngredientBySearchTerm__succes() throws Exception {
-        Ingredient tomate =persistSampleIngredient("Tomate");
-        Ingredient mate =persistSampleIngredient("Mate");
-        Ingredient zucker =persistSampleIngredient("Zucker");
+        Ingredient tomate = persistSampleIngredient("Tomate");
+        Ingredient mate = persistSampleIngredient("Mate");
+        Ingredient zucker = persistSampleIngredient("Zucker");
 
         String searchName = "ate";
 
-       MvcResult result = mockMvc.perform(get("/api/ingredients/search?name=" + searchName))
+        MvcResult result = mockMvc.perform(get("/api/ingredients/search?name=" + searchName))
                 .andExpect(status().isOk()).andReturn();
 
-        List<IngredientDto> dtos = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
+        List<IngredientDto> dtos = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        });
 
         List<String> dtoNames = dtos.stream().map(IngredientDto::name).toList();
 
         assertThat(dtoNames).containsExactlyInAnyOrder(tomate.getName(), mate.getName());
 
 
+    }
 
+    @Test
+    void createIngredient__success_with_max_length() throws Exception {
+        IngredientCreateOrUpdateResource createOrUpdateResource = new IngredientCreateOrUpdateResource("TomatensalaaaaaaaaaaaaaTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaatTomatensalaaaaaaaaaaaaaaataat", 50);
+
+        mockMvc.perform(
+                        post("/api/ingredients")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(createOrUpdateResource))
+                )
+                .andExpect(
+                        status().isBadRequest()
+                );
     }
 }

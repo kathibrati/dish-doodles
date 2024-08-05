@@ -30,6 +30,7 @@ public class AbstractControllerTestIT {
     public Ingredient persistSampleIngredient(String name) {
         Ingredient ingredient = Ingredient.builder()
                 .name(name)
+                .calories(100)
                 .build();
 
        return ingredientRepository.save(ingredient);

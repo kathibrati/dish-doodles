@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class IngredientService {
@@ -30,12 +31,13 @@ public class IngredientService {
     public Optional<IngredientDto> findById(Long id) {
         return ingredientRepository
                 .findById(id)
-                .map(IngredientDto::from);
+                .map(IngredientDto::new);
     }
 
     public IngredientDto save(IngredientCreateOrUpdateResource resource) {
         Ingredient entity = resource.convertToIngredient();
-        return IngredientDto.from(ingredientRepository.save(entity));
+        IngredientDto dto = new IngredientDto(ingredientRepository.save(entity));
+        return dto;
     }
 
     public void deleteById(Long id) {
@@ -44,7 +46,7 @@ public class IngredientService {
 
     public void updateIngredient(IngredientCreateOrUpdateResource resource, Long id) {
         Ingredient entityToUpdate = ingredientRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Entity for id:" + id + " not found!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity for id:" + id + " not found!"));
 
         updateEntity(resource, id, entityToUpdate);
         ingredientRepository.save(entityToUpdate);
@@ -56,6 +58,6 @@ public class IngredientService {
     }
 
     public List<IngredientDto> searchByName(String searchName) {
-        return ingredientRepository.findByNameContainsIgnoreCase(searchName);
+        return ingredientRepository.findByNameContainsIgnoreCase(searchName).stream().map(IngredientDto::new).toList();
     }
 }
