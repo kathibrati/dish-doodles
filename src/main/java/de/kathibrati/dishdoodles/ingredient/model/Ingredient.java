@@ -21,4 +21,6 @@ public class Ingredient {
 
     private Integer calories;
 
+    private Integer amount;
+
 }

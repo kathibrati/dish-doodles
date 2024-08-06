@@ -1,5 +1,6 @@
 package de.kathibrati.dishdoodles.recipe.service;
 
+import de.kathibrati.dishdoodles.ingredient.model.IngredientDto;
 import de.kathibrati.dishdoodles.recipe.model.RecipeDto;
 import de.kathibrati.dishdoodles.recipe.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,12 @@ public class RecipeService {
 
     public List<RecipeDto> findAll() {
         return recipeRepository.findAll().stream().map(RecipeDto::new).toList();
+    }
+
+    public static Integer calculateTotalRecipeKcals(List<IngredientDto> ingredientList) {
+
+        return ingredientList.stream()
+                .mapToInt(IngredientDto::calories)
+                .sum();
     }
 }

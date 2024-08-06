@@ -1,9 +1,10 @@
 package de.kathibrati.dishdoodles.recipe.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import de.kathibrati.dishdoodles.ingredient.model.Ingredient;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
@@ -17,9 +18,11 @@ public class Recipe {
   @GeneratedValue
   private Long id;
   private String recipeName;
-  private int totalKcals;
-  //TODO Lösung finden how to verschachtel
-//  private List<Ingredient> ingredientList;
+  private Integer totalKcals;
+
+  @JoinColumn
+  @OneToMany
+  private List<Ingredient> ingredientList;
 //  private List<OvenSetting> ovenSettings;
 //  private String cookingInstructions;
 //  private String dietaryRestrictions;
