@@ -20,7 +20,6 @@ public class Recipe {
   private String recipeName;
   private Integer totalKcals;
 
-  /* https://excalidraw.com/#json=QjEh1Wbqd9tblTduFIcae,6PC8Owfd9tUeCxZEeerkCw */
   @JoinColumn
   @OneToMany
   private List<Ingredient> ingredientList;

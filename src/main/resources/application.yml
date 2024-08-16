@@ -4,13 +4,5 @@ spring:
   application:
     name: Dish Doodles
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    password: example
-    username: example
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
